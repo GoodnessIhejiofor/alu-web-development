@@ -72,7 +72,7 @@ def create_user() -> str:
       - first_name (optional)
     Return:
       - User object JSON represented
-      - 400 if can't create the new User
+      - 500 if can't create the new User
     """
     rj = None
     error_msg = None
@@ -97,7 +97,7 @@ def create_user() -> str:
             return jsonify(user.to_json()), 201
         except Exception as e:
             error_msg = "Can't create User: {}".format(e)
-    return jsonify({'error': error_msg}), 400
+    return jsonify({'error': error_msg}), 500
 
 
 @app_views.route('/users/<user_id>', methods=['PUT'], strict_slashes=False)
