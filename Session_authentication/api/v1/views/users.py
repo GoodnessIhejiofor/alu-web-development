@@ -2,7 +2,7 @@
 """ Module of Users views
 """
 from api.v1.views import app_views
-from flask import abort, jsonify, request
+from flask import abort, jsonify, request # type: ignore
 from models.user import User
 
 
@@ -97,7 +97,7 @@ def create_user() -> str:
             return jsonify(user.to_json()), 201
         except Exception as e:
             error_msg = "Can't create User: {}".format(e)
-    return jsonify({'error': error_msg}), 500
+    return jsonify({'error': error_msg}), 400
 
 
 @app_views.route('/users/<user_id>', methods=['PUT'], strict_slashes=False)
