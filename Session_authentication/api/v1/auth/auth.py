@@ -5,12 +5,12 @@ Auth class
 
 from flask import request
 from typing import List, TypeVar
+import os
 
 
 class Auth:
     """ Auth class
     """
-
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """ require_auth
         """
@@ -40,3 +40,11 @@ class Auth:
         """ current_user
         """
         return None
+
+    def session_cookie(self, request=None):
+        """ session_cookie
+        """
+        if request is None:
+            return None
+        cookie = os.getenv('SESSION_NAME')
+        return request.cookies.get(cookie)

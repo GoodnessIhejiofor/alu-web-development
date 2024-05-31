@@ -2,7 +2,7 @@
 """ Module of Users views
 """
 from api.v1.views import app_views
-from flask import abort, jsonify, request # type: ignore
+from flask import abort, jsonify, request
 from models.user import User
 
 
@@ -29,19 +29,13 @@ def view_one_user(user_id: str = None) -> str:
         abort(404)
     if user_id == 'me' and request.current_user is None:
         abort(404)
+    if user_id == 'me' and request.current_user is not None:
+        user = request.current_user
+        return jsonify(user.to_json()), 200
     user = User.get(user_id)
     if user is None:
         abort(404)
     return jsonify(user.to_json())
-
-
-@app_views.route('/users/me', methods=['GET'], strict_slashes=False)
-def retrieveMe() -> str:
-    """ Retrieve the authenticated User object.
-    Return:
-        User object JSON represented
-    """
-    return jsonify(request.current_user.to_json())
 
 
 @app_views.route('/users/<user_id>', methods=['DELETE'], strict_slashes=False)
@@ -72,7 +66,7 @@ def create_user() -> str:
       - first_name (optional)
     Return:
       - User object JSON represented
-      - 500 if can't create the new User
+      - 400 if can't create the new User
     """
     rj = None
     error_msg = None
